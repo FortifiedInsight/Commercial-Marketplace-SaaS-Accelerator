@@ -32,6 +32,7 @@ env:
   SQLSCRIPT_PATH: './src/Marketplace.SaaS.Accelerator.AdminSite/publish'
   DOTNET_CORE_VERSION: '8.0.303'
   RUN_TESTS: 'false'
+  RUN_DB_MIGRATION: 'false'
   
 jobs:
   deployandtest:
@@ -83,6 +84,13 @@ jobs:
         package: ${{ env.PUBLISHER_AZURE_WEBAPP_PACKAGE_PATH }}
     
     - name: EF Database Update
+      if: ${{ env.RUN_DB_MIGRATION == 'true' }}
+      env:
+        Connection: ${{ secrets.SQL_CONNECTION_STRING }}
+        SQL_SERVER_NAME: ${{ secrets.SQL_SERVER_NAME }}
+        SQL_DATABASE_NAME: ${{ secrets.SQL_DATABASE_NAME }}
+        SQL_ADMIN_LOGIN: ${{ secrets.SQL_ADMIN_LOGIN }}
+        SQL_ADMIN_LOGIN_PASSWORD: ${{ secrets.SQL_ADMIN_LOGIN_PASSWORD }}
       shell: pwsh
       run: |
             Write-Host "dotnet tools restore"
