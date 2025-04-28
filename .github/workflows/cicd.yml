@@ -83,7 +83,6 @@ jobs:
         package: ${{ env.PUBLISHER_AZURE_WEBAPP_PACKAGE_PATH }}
     
     - name: EF Database Update
-      if: ${{ env.RUN_TESTS == 'true' }}
       shell: pwsh
       run: |
             Write-Host "dotnet tools restore"
